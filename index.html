@@ -3,89 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGRI-LOAN | Tim Kerja Agritanhut</title>
+    <title>AGRI-LOAN | Agritanhut</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
-        :root { --muted-green: #5b705b; --warm-grey: #f4f4f4; --soft-white: #ffffff; }
-        body { background-color: var(--warm-grey); font-family: 'Inter', sans-serif; color: #333; }
-        .navbar { background: var(--muted-green) !important; padding: 15px 0; }
-        .hero-section { 
-            background: linear-gradient(rgba(91, 112, 91, 0.85), rgba(91, 112, 91, 0.95)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1000');
-            background-size: cover; background-position: center; color: white; padding: 60px 20px; border-radius: 0 0 40px 40px; margin-bottom: 30px;
-        }
-        .card-barang { border: none; border-radius: 24px; background: var(--soft-white); box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 20px; overflow: hidden; }
-        .img-wrapper { position: relative; padding: 12px; }
-        .foto-utama { width: 100%; height: 200px; object-fit: cover; border-radius: 18px; }
-        .stock-tag { position: absolute; top: 22px; left: 22px; background: white; padding: 5px 14px; border-radius: 10px; font-weight: 800; font-size: 0.7rem; color: var(--muted-green); }
-        .peminjam-card { background: #f9f9f9; border-radius: 14px; padding: 12px; margin-bottom: 10px; border-left: 5px solid var(--muted-green); font-size: 0.75rem; position: relative; }
-        .btn-action { border-radius: 14px; font-weight: 700; font-size: 0.75rem; padding: 14px; border: none; width: 100%; text-transform: uppercase; }
-        .btn-pinjam { background: var(--muted-green); color: white; }
-        .btn-kembali { background: #e9ecef; color: #555; }
-        .admin-del-log { position: absolute; top: 10px; right: 10px; color: #dc3545; cursor: pointer; }
+        :root { --muted-green: #5b705b; --warm-grey: #f4f4f4; }
+        body { background-color: var(--warm-grey); font-family: sans-serif; }
+        .hero-section { background: linear-gradient(rgba(91,112,91,0.9), rgba(91,112,91,0.9)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000'); background-size: cover; color: white; padding: 50px 20px; border-radius: 0 0 30px 30px; margin-bottom: 30px; }
+        .card-barang { border: none; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .foto-utama { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; }
+        .peminjam-card { background: #fff; border-radius: 10px; padding: 10px; margin-bottom: 8px; border-left: 4px solid #5b705b; font-size: 0.75rem; position: relative; }
+        .btn-pinjam { background: #5b705b; color: white; border-radius: 10px; font-weight: bold; }
+        .btn-kembali { background: #6c757d; color: white; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="authArea">
-    <div id="rolePage" class="container vh-100 d-flex align-items-center justify-content-center text-center">
-        <div class="bg-white p-5 rounded-5 shadow-lg" style="max-width: 450px; width:100%;">
-            <h2 class="fw-bold mb-2" style="color: var(--muted-green);">AGRI-LOAN</h2>
-            <h5 class="fw-bold mb-4 text-dark">Tim Kerja Agritanhut<br>BBPPMPV Pertanian</h5>
-            <button onclick="entry('User')" class="btn btn-action btn-pinjam py-3 mb-3">MULAI PEMINJAMAN</button>
-            <button onclick="showAdmin()" class="btn btn-link text-muted">Akses Admin</button>
+    <div class="container vh-100 d-flex align-items-center justify-content-center text-center">
+        <div class="bg-white p-5 rounded-5 shadow" style="max-width: 400px; width:100%;">
+            <h2 class="fw-bold mb-2">AGRI-LOAN</h2>
+            <p class="mb-4">Tim Kerja Agritanhut<br>BBPPMPV Pertanian</p>
+            <button onclick="entry('User')" class="btn btn-pinjam w-100 py-3 mb-3">MULAI</button>
+            <button onclick="showAdmin()" class="btn btn-link text-muted">Admin</button>
         </div>
     </div>
 </div>
 
 <div id="appInterface" style="display:none;">
-    <nav class="navbar navbar-dark sticky-top shadow-sm text-white">
-        <div class="container d-flex justify-content-between">
-            <span class="fw-bold">AGRI-LOAN | Agritanhut</span>
+    <nav class="navbar navbar-dark bg-success sticky-top shadow-sm">
+        <div class="container">
+            <span class="navbar-brand fw-bold">AGRI-LOAN</span>
             <div>
-                <button id="btnRiwayat" class="btn btn-sm btn-light rounded-pill me-2 d-none" onclick="toggleRiwayat()">Rekap Riwayat</button>
-                <button onclick="location.reload()" class="btn btn-outline-light btn-sm rounded-pill">Keluar</button>
+                <button id="btnRiwayat" class="btn btn-sm btn-light d-none me-2" onclick="toggleRiwayat()">Riwayat</button>
+                <button onclick="location.reload()" class="btn btn-outline-light btn-sm">Keluar</button>
             </div>
         </div>
     </nav>
 
     <header class="hero-section text-center">
-        <div class="container">
-            <h1 class="fw-bold display-6 mb-2">Sistem Peminjaman Alat</h1>
-            <p class="lead opacity-90 fw-medium">Tim Kerja Agritanhut BBPPMPV Pertanian</p>
-        </div>
+        <h1 class="fw-bold">Peminjaman Alat</h1>
+        <p>Tim Kerja Agritanhut BBPPMPV Pertanian</p>
     </header>
 
     <div class="container pb-5">
         <div id="adminPanel" class="p-4 mb-4 d-none bg-white rounded-4 shadow-sm border border-success">
-            <h6 class="fw-bold mb-3 text-success">Tambah Alat Baru</h6>
-            <div class="row g-2">
-                <div class="col-md-4"><input type="text" id="nInp" class="form-control" placeholder="Nama Alat"></div>
-                <div class="col-md-2"><input type="number" id="sInp" class="form-control" placeholder="Stok"></div>
-                <div class="col-md-4"><input type="file" id="fInp" class="form-control" accept="image/*"></div>
-                <div class="col-md-2"><button onclick="addDB()" class="btn btn-pinjam w-100 h-100">SIMPAN</button></div>
-            </div>
+            <h6 class="fw-bold mb-3">Tambah Alat</h6>
+            <input type="text" id="nInp" class="form-control mb-2" placeholder="Nama Alat">
+            <input type="number" id="sInp" class="form-control mb-2" placeholder="Stok">
+            <input type="file" id="fInp" class="form-control mb-3" accept="image/*">
+            <button onclick="addDB()" class="btn btn-success w-100">SIMPAN</button>
         </div>
 
-        <div id="riwayatArea" class="mb-5 d-none">
-            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Rekap Pengembalian</h5>
-            <div id="listRiwayat" class="row g-3"></div>
-            <hr>
+        <div id="riwayatArea" class="mb-4 d-none bg-white p-3 rounded-4 shadow-sm">
+            <h6 class="fw-bold">Rekap Riwayat (Admin)</h6>
+            <div id="listRiwayat" class="row"></div>
         </div>
 
-        <div class="row g-4" id="renderArea"></div>
+        <div class="row" id="renderArea"></div>
     </div>
 </div>
 
 <input type="file" id="camInput" accept="image/*" capture="environment" style="display: none;">
 
 <script>
-    // Konfigurasi Firebase Anda
     const firebaseConfig = {
         apiKey: "AIzaSyC-5O3AXJhbQXAXhSEAEyTPQP6Xrk1gOIU",
         authDomain: "agri-loan-381ff.firebaseapp.com",
@@ -100,7 +85,7 @@
     const db = firebase.database();
     let myRole = "";
 
-    function showAdmin() { if(prompt("Pass:") === "admin123") entry('Admin'); }
+    function showAdmin() { if(prompt("Password:") === "admin123") entry('Admin'); }
 
     function entry(role) {
         myRole = role;
@@ -110,137 +95,102 @@
             document.getElementById('adminPanel').classList.remove('d-none');
             document.getElementById('btnRiwayat').classList.remove('d-none');
         }
-        loadData();
+        db.ref('inventaris_multi').on('value', (s) => {
+            const data = s.val(); if(!data) return;
+            renderItems(data);
+            if(myRole === 'Admin') renderRiwayat(data);
+        });
     }
 
-    function loadData() {
-        db.ref('inventaris_multi').on('value', (s) => {
-            const container = document.getElementById('renderArea');
-            container.innerHTML = "";
-            const data = s.val(); if(!data) return;
-
-            Object.values(data).reverse().forEach(item => {
-                const logs = item.peminjam_aktif ? Object.entries(item.peminjam_aktif) : [];
-                const tersedia = item.stok_tersedia !== undefined ? item.stok_tersedia : item.total_stok;
-
-                container.innerHTML += `
-                <div class="col-md-6 col-lg-4">
-                    <div class="card card-barang h-100 p-2">
-                        <div class="img-wrapper">
-                            <div class="stock-tag">TERSEDIA: ${tersedia} UNIT</div>
-                            <img src="${item.foto}" class="foto-utama">
+    function renderItems(data) {
+        const area = document.getElementById('renderArea'); area.innerHTML = "";
+        Object.values(data).reverse().forEach(item => {
+            const logs = item.peminjam_aktif ? Object.entries(item.peminjam_aktif) : [];
+            const tersedia = item.stok_tersedia !== undefined ? item.stok_tersedia : item.total_stok;
+            area.innerHTML += `
+                <div class="col-md-6 mb-4">
+                    <div class="card card-barang p-3">
+                        <img src="${item.foto}" class="foto-utama mb-3">
+                        <h5 class="fw-bold text-center">${item.nama} (Sisa: ${tersedia})</h5>
+                        <div class="my-3">
+                            ${logs.map(([k, v]) => `
+                                <div class="peminjam-card shadow-sm">
+                                    ${myRole === 'Admin' ? `<i class="bi bi-trash text-danger float-end" onclick="adminHapusLog('${item.id}','${k}',${v.jumlah})"></i>` : ''}
+                                    <b>${v.nama}</b> (${v.jumlah} unit)<br><small>${v.waktu}</small>
+                                </div>
+                            `).join('')}
                         </div>
-                        <div class="card-body pt-2 text-center">
-                            <h5 class="fw-bold mb-3 text-uppercase text-success">${item.nama}</h5>
-                            <div class="mb-3 text-start" style="max-height:200px; overflow-y:auto; border-top:1px solid #eee; padding-top:10px;">
-                                ${logs.map(([key, val]) => `
-                                    <div class="peminjam-card shadow-sm">
-                                        ${myRole === 'Admin' ? `<i class="bi bi-x-circle-fill admin-del-log" onclick="adminHapusLog('${item.id}', '${key}', ${val.jumlah})"></i>` : ''}
-                                        <div class="d-flex justify-content-between mb-1"><b>${val.nama}</b> <span class="badge bg-dark">${val.jumlah} Unit</span></div>
-                                        <div class="row g-2 mt-1">
-                                            <div class="col-4"><img src="${val.foto_p}" style="width:100%; height:50px; object-fit:cover; border-radius:5px;"></div>
-                                            <div class="col-8" style="font-size:0.6rem">${val.waktu}<br>Kondisi: ${val.desc_p}</div>
-                                        </div>
-                                    </div>`).join('')}
-                            </div>
-                            <div class="row g-2">
-                                <div class="col-6"><button onclick="mulaiProses('${item.id}', 'pinjam')" class="btn btn-action btn-pinjam" ${tersedia <= 0 ? 'disabled' : ''}>PEMINJAMAN</button></div>
-                                <div class="col-6"><button onclick="mulaiProses('${item.id}', 'kembali')" class="btn btn-action btn-kembali">PENGEMBALIAN</button></div>
-                            </div>
-                            ${myRole === 'Admin' ? `<button onclick="hapusBarang('${item.id}')" class="btn btn-link text-danger mt-2 small fw-bold" style="font-size:0.6rem;">HAPUS ALAT PERMANEN</button>` : ''}
+                        <div class="row g-2">
+                            <div class="col-6"><button onclick="proses('${item.id}', 'pinjam')" class="btn btn-pinjam w-100" ${tersedia <= 0 ? 'disabled' : ''}>PINJAM</button></div>
+                            <div class="col-6"><button onclick="proses('${item.id}', 'kembali')" class="btn btn-kembali w-100">KEMBALI</button></div>
                         </div>
                     </div>
                 </div>`;
-            });
-            if(myRole === 'Admin') updateRiwayat(data);
         });
     }
 
-    function toggleRiwayat() { document.getElementById('riwayatArea').classList.toggle('d-none'); }
-
-    function updateRiwayat(data) {
-        const area = document.getElementById('listRiwayat'); area.innerHTML = "";
-        Object.values(data).forEach(item => {
-            if(item.riwayat_selesai) {
-                Object.values(item.riwayat_selesai).reverse().forEach(r => {
-                    area.innerHTML += `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="bg-white p-3 rounded-4 shadow-sm border-start border-primary border-4" style="font-size:0.7rem;">
-                            <div class="fw-bold text-primary mb-1">${item.nama.toUpperCase()}</div>
-                            <div>Peminjam: <b>${r.nama}</b> (${r.jumlah} Unit)</div>
-                            <div class="text-muted mb-2">Kembali: ${r.waktu_k}</div>
-                            <div class="row g-1">
-                                <div class="col-6"><span>Foto Pinjam:</span><img src="${r.foto_p}" style="width:100%; height:60px; object-fit:cover;"></div>
-                                <div class="col-6"><span>Foto Kembali:</span><img src="${r.foto_k}" style="width:100%; height:60px; object-fit:cover;"></div>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-            }
-        });
-    }
-
-    function mulaiProses(id, tipe) {
-        db.ref('inventaris_multi/'+id).once('value', (snap) => {
-            const data = snap.val();
+    function proses(id, tipe) {
+        db.ref('inventaris_multi/'+id).once('value').then(s => {
+            const data = s.val();
+            const stok = data.stok_tersedia !== undefined ? data.stok_tersedia : data.total_stok;
             const cam = document.getElementById('camInput');
-            const stokSkrg = data.stok_tersedia !== undefined ? data.stok_tersedia : data.total_stok;
 
             if(tipe === 'pinjam') {
-                const nama = prompt("Nama Peminjam:"); if(!nama) return;
-                const jml = parseInt(prompt("Jumlah Unit:"));
-                if(isNaN(jml) || jml > stokSkrg || jml <= 0) return alert("Jumlah tidak valid!");
-                const desc = prompt("Kondisi Alat:");
-                alert("Klik OK untuk Ambil Foto Peminjaman");
+                const nama = prompt("Nama:"); if(!nama) return;
+                const jml = parseInt(prompt("Jumlah (Maks "+stok+"):"));
+                if(!jml || jml > stok) return alert("Batal/Stok Kurang");
                 cam.onchange = (e) => {
                     const r = new FileReader(); r.onloadend = () => {
-                        const logId = Date.now();
-                        const update = {};
-                        update[`inventaris_multi/${id}/peminjam_aktif/${logId}`] = { nama, jumlah: jml, desc_p: desc, foto_p: r.result, waktu: new Date().toLocaleString('id-ID') };
-                        update[`inventaris_multi/${id}/stok_tersedia`] = stokSkrg - jml;
-                        db.ref().update(update).then(() => alert("Berhasil!"));
+                        const lid = Date.now(); const up = {};
+                        up[`inventaris_multi/${id}/peminjam_aktif/${lid}`] = { nama, jumlah: jml, foto_p: r.result, waktu: new Date().toLocaleString() };
+                        up[`inventaris_multi/${id}/stok_tersedia`] = stok - jml;
+                        db.ref().update(up);
                     }; r.readAsDataURL(e.target.files[0]);
-                };
-                cam.click();
+                }; cam.click();
             } else {
-                const aktif = Object.entries(data.peminjam_aktif || {});
-                if(aktif.length === 0) return alert("Tidak ada data.");
-                const targetNama = prompt("Ketik Nama Pengembali:\n" + aktif.map(([k,v]) => `- ${v.nama}`).join("\n"));
+                const aktif = data.peminjam_aktif ? Object.entries(data.peminjam_aktif) : [];
+                if(aktif.length === 0) return alert("Kosong");
+                const targetNama = prompt("Nama Peminjam?");
                 const target = aktif.find(([k,v]) => v.nama.toLowerCase() === targetNama.toLowerCase());
-                if(!target) return alert("Nama salah!");
-                const descK = prompt("Kondisi Kembali:");
-                alert("Klik OK untuk Ambil Foto Pengembalian");
+                if(!target) return alert("Tidak ada!");
                 cam.onchange = (e) => {
                     const r = new FileReader(); r.onloadend = () => {
-                        const update = {};
-                        update[`inventaris_multi/${id}/riwayat_selesai/${Date.now()}`] = { ...target[1], foto_k: r.result, desc_k: descK, waktu_k: new Date().toLocaleString('id-ID') };
-                        update[`inventaris_multi/${id}/peminjam_aktif/${target[0]}`] = null;
-                        update[`inventaris_multi/${id}/stok_tersedia`] = stokSkrg + target[1].jumlah;
-                        db.ref().update(update).then(() => alert("Berhasil Kembali!"));
+                        const up = {}; const rid = Date.now();
+                        up[`inventaris_multi/${id}/riwayat_selesai/${rid}`] = { ...target[1], foto_k: r.result, waktu_k: new Date().toLocaleString() };
+                        up[`inventaris_multi/${id}/peminjam_aktif/${target[0]}`] = null;
+                        up[`inventaris_multi/${id}/stok_tersedia`] = stok + target[1].jumlah;
+                        db.ref().update(up);
                     }; r.readAsDataURL(e.target.files[0]);
-                };
-                cam.click();
+                }; cam.click();
             }
         });
     }
 
     function addDB() {
         const n = document.getElementById('nInp').value; const s = document.getElementById('sInp').value; const f = document.getElementById('fInp').files[0];
-        if(!n || !s || !f) return alert("Lengkapi data!");
+        if(!n || !s || !f) return alert("Lengkapi!");
         const r = new FileReader(); r.onloadend = () => {
-            const id = Date.now(); 
-            db.ref('inventaris_multi/'+id).set({ id, nama:n, total_stok:parseInt(s), stok_tersedia:parseInt(s), foto:r.result });
-            alert("Selesai!");
+            const id = Date.now(); db.ref('inventaris_multi/'+id).set({ id, nama: n, total_stok: parseInt(s), stok_tersedia: parseInt(s), foto: r.result });
+            alert("Berhasil!");
         }; r.readAsDataURL(f);
     }
 
-    function hapusBarang(id) { if(confirm("Hapus permanen?")) db.ref('inventaris_multi/' + id).remove(); }
-    function adminHapusLog(itemId, logId, jml) {
-        if(confirm("Batalkan peminjaman ini?")) {
-            db.ref('inventaris_multi/'+itemId).once('value', s => {
-                const up = {};
-                up[`inventaris_multi/${itemId}/peminjam_aktif/${logId}`] = null;
-                up[`inventaris_multi/${itemId}/stok_tersedia`] = (s.val().stok_tersedia || 0) + jml;
+    function toggleRiwayat() { document.getElementById('riwayatArea').classList.toggle('d-none'); }
+    function renderRiwayat(data) {
+        const area = document.getElementById('listRiwayat'); area.innerHTML = "";
+        Object.values(data).forEach(item => {
+            if(item.riwayat_selesai) {
+                Object.values(item.riwayat_selesai).forEach(r => {
+                    area.innerHTML += `<div class="col-6 mb-2" style="font-size:0.6rem"><b>${r.nama}</b> - ${item.nama}<br>${r.waktu_k}</div>`;
+                });
+            }
+        });
+    }
+    function adminHapusLog(iid, lid, j) {
+        if(confirm("Hapus log?")) {
+            db.ref('inventaris_multi/'+iid).once('value', s => {
+                const up = {}; up[`inventaris_multi/${iid}/peminjam_aktif/${lid}`] = null;
+                up[`inventaris_multi/${iid}/stok_tersedia`] = (s.val().stok_tersedia || 0) + j;
                 db.ref().update(up);
             });
         }
